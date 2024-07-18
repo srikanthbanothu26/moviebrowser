@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl font-bold text-center mb-6">Search for Movies</h1>
+        <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="movieName" class="block text-gray-700 text-sm font-bold mb-2">Movie Name:</label>
+                <input type="text" id="movieName" name="movieName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="Year" class="block text-gray-700 text-sm font-bold mb-2">Year:</label>
+                <select id="Year" name="Year" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>                 
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Search
+                </button>
+            </div>
+        </form>
+        {% if movies %}
+            <h2 class="text-2xl font-bold mb-4">Results:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for movie in movies %}
+                    <div class="bg-white shadow-md rounded p-4">
+                        <h3 class="text-xl font-bold">{{ movie.title }} ({{ movie.release_date }})</h3>
+                        <p class="text-gray-700">{{ movie.overview }}</p>
+                        <p class="text-gray-700">Vote Average: {{ movie.vote_average }}</p>
+                        <p class="text-gray-700">Popularity: {{ movie.popularity }}</p>
+                        {% if movie.poster_path %}
+                            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }} Poster" class="w-full h-auto">
+                        {% endif %}
+                        {% if movie.backdrop_path %}
+                            <img src="https://image.tmdb.org/t/p/w500{{ movie.backdrop_path }}" alt="{{ movie.title }} Backdrop" class="w-full h-auto">
+                        {% endif %}
+                        <p class="text-gray-700">Genres: {{ movie.genres }}</p>
+                        <p class="text-gray-700">Actors: {{ movie.actors }}</p>
+                        <p class="text-gray-700">Writers: {{ movie.writers }}</p>
+                        <p class="text-gray-700">Budget: {{ movie.budget }}</p>
+                        <p class="text-gray-700">Revenue: {{ movie.revenue }}</p>
+                        <p class="text-gray-700">Original Language: {{ movie.original_language }}</p>
+                        <p class="text-gray-700">Original Title: {{ movie.original_title }}</p>
+                        <p class="text-gray-700">Vote Count: {{ movie.vote_count }}</p>
+                        <p class="text-gray-700">Adult: {{ movie.adult }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
